@@ -16,77 +16,105 @@ export const Actions = {
 const reducer = (state, action) => {
   switch (action.type) {
     case Actions.Add_digit: {
+      if (state.currentNumber === 0 && action.payload.value === 0) {
+        return {
+          ...state,
+          lastPressed: "digit",
+        };
+      }
+
+      if (state.lastPressed !== "digit") {
+        return {
+          ...state,
+          currentNumber: action.payload.value,
+          lastPressed: "digit",
+        };
+      }
+
       return {
         ...state,
         currentNumber:
-          state.currentNumber == 0 || state.lastPressed == "operator"
+          state.currentNumber === 0 && state.lastPressed !== "digit"
             ? action.payload.value
-            : state.currentNumber.toString() + action.payload.value.toString(),
+            : state.currentNumber.toString() + action.payload.value,
         lastPressed: "digit",
-        calculations:
-          state.currentNumber === 0
-            ? state.calculations
-            : state.calculations + state.currentNumber.toString(),
       };
     }
 
     case Actions.Add_Operator: {
-      const evaluated = Evaluate(
-        state.previousNumber,
-        state.operator,
-        state.currentNumber
-      );
+      if (state.currentNumber !== null && state.previousNumber !== null) {
+        const evaluated = Evaluate(
+          state.previousNumber,
+          state.operator,
+          state.currentNumber
+        );
+
+        return {
+          ...state,
+          previousNumber: evaluated,
+          currentNumber: evaluated,
+          operator: action.payload.value,
+          lastPressed: "operator",
+        };
+      }
       return {
         ...state,
-        previousNumber:
-          state.operator && state.lastPressed === "digit"
-            ? evaluated
-            : state.currentNumber,
-        currentNumber:
-          state.operator && state.lastPressed === "digit"
-            ? evaluated
-            : state.currentNumber,
+        previousNumber: state.currentNumber,
         operator: action.payload.value,
         lastPressed: "operator",
-        calculations: state.operator
-          ? state.calculations + state.operator
-          : state.calculations,
-      };
-    }
-
-    case Actions.Add_Decimal: {
-      return {
-        ...state,
-        currentNumber: state.currentNumber.toString().includes(".")
-          ? state.currentNumber
-          : state.currentNumber.toString() + action.payload.value,
       };
     }
 
     case Actions.Calculate: {
-      //i stopped here, yet to create the evaluate function==> recent stop
       const evaluated = Evaluate(
         state.previousNumber,
         state.operator,
         state.currentNumber
       );
+
+      if (state.lastPressed === "operator") {
+        return state;
+      }
+
+      if (state.lastPressed === "equals") {
+        const storedEvaluate = Evaluate(
+          state.currentNumber,
+          state.operator,
+          state.store
+        );
+        return {
+          ...state,
+          currentNumber: storedEvaluate,
+          lastPressed: "equals",
+        };
+      }
+
       return {
         ...state,
+        previousNumber: null,
         currentNumber: evaluated,
-        previousNumber: evaluated,
-        calculations: "",
+        store: state.currentNumber,
+        lastPressed: "equals",
+      };
+    }
+
+    case Actions.Add_Decimal: {
+      if (state.currentNumber.toString().includes(".")) {
+        return state;
+      }
+      return {
+        ...state,
+        currentNumber:
+          state.currentNumber.toString() + action.payload.value.toString(),
       };
     }
 
     case Actions.Clear: {
-      console.log("the calculator has been cleared");
       return {
-        ...state,
         currentNumber: 0,
         previousNumber: null,
-        lastPressed: null,
         operator: null,
-        calculations: "",
+        lastPressed: null,
       };
     }
 
@@ -102,8 +130,7 @@ function App() {
     previousNumber: null,
     lastPressed: null,
     operator: null,
-    calculations: "",
-    check: " ",
+    store: null,
   });
 
   return (
@@ -111,10 +138,7 @@ function App() {
       <p> {JSON.stringify(display)}</p>
       <div className="CalcContainer">
         <div className="Screen">
-          <span className="fs-small display-block mg-bottom-large">
-            {display.previousNumber ? display.previousNumber : " "}{" "}
-            {display.operator ? display.operator : ""}
-          </span>
+          <span className="fs-small display-block mg-bottom-large"></span>
           <span className="fs-large">{display.currentNumber}</span>
         </div>
         <div className="ButtonContainer">
