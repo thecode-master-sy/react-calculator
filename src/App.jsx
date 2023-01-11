@@ -28,6 +28,7 @@ const reducer = (state, action) => {
           ...state,
           currentNumber: action.payload.value,
           lastPressed: "digit",
+          history: state.history + action.payload.value,
         };
       }
 
@@ -38,6 +39,7 @@ const reducer = (state, action) => {
             ? action.payload.value
             : state.currentNumber.toString() + action.payload.value,
         lastPressed: "digit",
+        history: state.history + action.payload.value,
       };
     }
 
@@ -55,6 +57,7 @@ const reducer = (state, action) => {
           currentNumber: evaluated,
           operator: action.payload.value,
           lastPressed: "operator",
+          history: state.history + " " + action.payload.value + " ",
         };
       }
       return {
@@ -62,6 +65,7 @@ const reducer = (state, action) => {
         previousNumber: state.currentNumber,
         operator: action.payload.value,
         lastPressed: "operator",
+        history: state.history + " " + action.payload.value + " ",
       };
     }
 
@@ -115,6 +119,7 @@ const reducer = (state, action) => {
         previousNumber: null,
         operator: null,
         lastPressed: null,
+        history: "",
       };
     }
 
@@ -131,6 +136,7 @@ function App() {
     lastPressed: null,
     operator: null,
     store: null,
+    history: "",
   });
 
   return (
@@ -138,7 +144,9 @@ function App() {
       <p> {JSON.stringify(display)}</p>
       <div className="CalcContainer">
         <div className="Screen">
-          <span className="fs-small display-block mg-bottom-large"></span>
+          <span className="fs-small display-block mg-bottom-large">
+            {display.history}
+          </span>
           <span className="fs-large">{display.currentNumber}</span>
         </div>
         <div className="ButtonContainer">
