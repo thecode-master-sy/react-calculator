@@ -11,6 +11,10 @@
   color: white;
 }
 
+.border {
+  border: 1px solid white;
+}
+
 .spanTwo {
   grid-column: span 2;
   aspect-ratio: 1/0.5;
@@ -88,7 +92,7 @@ button:active {
 .CalcContainer {
   background-color: black;
   padding: 1em;
-  width: min(100%, 20em);
+  width: min(100%, 15em);
   margin: auto;
   border-radius: 2em;
   box-shadow: 0 0 1em -0.8em rgba(0, 0, 0, 0.8);

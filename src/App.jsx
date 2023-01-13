@@ -1,4 +1,4 @@
-import { useState, useReducer, useMemo } from "react";
+import { useState, useReducer, useMemo, useEffect } from "react";
 import Number from "./components/NumberButtons";
 import Operator from "./components/OperatorButtons";
 import { Evaluate } from "./Evaluate";
@@ -167,18 +167,20 @@ function App() {
     history: "",
   });
 
-  let fsLarge = useMemo(() => {
+  const [fsLarge, setFont] = useState("fs-large");
+
+  useEffect(() => {
     if (display.currentNumber.toString().length > 10) {
-      return "fs-mid";
+      setFont("fs-mid");
     } else {
-      return "fs-large";
+      setFont("fs-large");
     }
   }, [display.currentNumber]);
 
   return (
     <div className="App">
       <div className="CalcContainer">
-        <div className="Screen">
+        <div className="Screen border">
           <span className="fs-small display-block mg-bottom-large">
             {display.history}
           </span>
