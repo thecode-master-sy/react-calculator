@@ -92,7 +92,8 @@ button:active {
 .CalcContainer {
   background-color: black;
   padding: 1em;
-  width: min(100%, 15em);
+  width: 100%;
+  max-width: 18em;
   margin: auto;
   border-radius: 2em;
   box-shadow: 0 0 1em -0.8em rgba(0, 0, 0, 0.8);
