@@ -1,4 +1,4 @@
-import { useState, useReducer } from "react";
+import { useState, useReducer, useMemo } from "react";
 import Number from "./components/NumberButtons";
 import Operator from "./components/OperatorButtons";
 import { Evaluate } from "./Evaluate";
@@ -10,7 +10,31 @@ export const Actions = {
   Add_Operator: "add-operator",
   Add_Decimal: "add-decimal",
   Clear: "clear",
+  Delete: "delete",
   Calculate: "calculate",
+};
+
+export const Format = (number) => {
+  const formater = new Intl.NumberFormat();
+
+  if (number.toString().includes(".")) {
+    const splitNum = number.toString().split(".");
+
+    let whole = splitNum[0];
+    let decimal = splitNum[1];
+
+    whole = formater.format(whole);
+
+    const joined = whole + "." + decimal;
+
+    // const decimalNum = splitNum[1];
+    //
+    // const wholeFormated = wholeNum.toLocaleString();
+
+    return joined;
+  } else {
+    return formater.format(number);
+  }
 };
 
 const reducer = (state, action) => {
@@ -113,6 +137,10 @@ const reducer = (state, action) => {
       };
     }
 
+    case Actions.Delete: {
+      console.log("deleted 1 digit");
+    }
+
     case Actions.Clear: {
       return {
         currentNumber: 0,
@@ -139,22 +167,31 @@ function App() {
     history: "",
   });
 
+  let fsLarge = useMemo(() => {
+    if (display.currentNumber.toString().length > 10) {
+      return "fs-mid";
+    } else {
+      return "fs-large";
+    }
+  }, [display.currentNumber]);
+
   return (
     <div className="App">
-      <p> {JSON.stringify(display)}</p>
       <div className="CalcContainer">
         <div className="Screen">
           <span className="fs-small display-block mg-bottom-large">
             {display.history}
           </span>
-          <span className="fs-large">{display.currentNumber}</span>
+          <span className={fsLarge}>{Format(display.currentNumber)}</span>
         </div>
         <div className="ButtonContainer">
           <div className="Number">
             <button onClick={() => dispatch({ type: Actions.Clear })}>
               AC
             </button>
-            <button>±</button>
+            <button onClick={() => dispatch({ type: Actions.Delete })}>
+              DEL
+            </button>
             <button>%</button>
 
             <Number dispatch={dispatch} payload={{ value: 7 }} />
