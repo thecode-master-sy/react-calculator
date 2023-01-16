@@ -1,7 +1,15 @@
-/* general styling and utility classes */
 :root {
+  --fs-large: clamp(2rem, 2.5vw, 2.8rem);
+  --fs-mid: clamp(1.5rem, 2.5vw, 1.8rem);
+  --fs-btn: clamp(1.2rem, 2.5vw, 1.5rem);
   --gap: 0.5em;
 }
+
+.App {
+  padding-top: 2em;
+  width: 100%;
+}
+
 .gray {
   background-color: #333333;
   color: white;
@@ -9,16 +17,6 @@
 .orange {
   background-color: #f2a33c;
   color: white;
-}
-
-.border {
-  border: 1px solid white;
-}
-
-.spanTwo {
-  grid-column: span 2;
-  aspect-ratio: 1/0.5;
-  border-radius: 2.5em;
 }
 
 .mg-bottom-small {
@@ -33,31 +31,23 @@
   margin-bottom: 2em;
 }
 
-.Number {
-  flex: 3;
-  display: grid;
-  gap: var(--gap);
-  grid-template-columns: repeat(3, 1fr);
-}
-
-.Operator {
-  flex: 1;
-  display: grid;
-  grid-auto-rows: 1fr;
-  gap: var(--gap);
-}
-
 .fs-large {
-  font-size: 2.8em;
+  font-size: var(--fs-large);
 }
 
 .fs-small {
-  font-size: 1em;
+  font-size: var(--fs-small);
 }
 
 .fs-mid {
-  font-size: 1.5em;
+  font-size: var(--fs-mid);
   transition: all ease 0.5s;
+}
+
+.spanTwo {
+  grid-column: span 2;
+  aspect-ratio: 1/0.5;
+  border-radius: 2.5em;
 }
 
 .display-block {
@@ -67,36 +57,20 @@
 .Button,
 button {
   border: none;
-  width: 100%;
-  height: 100%;
   aspect-ratio: 1/1;
   text-align: center;
   border-radius: 50%;
-  font-size: 1.3em;
+  font-size: var(--fs-btn);
   cursor: pointer;
 }
 
-button:hover {
-  opacity: 0.8;
-}
-
-button:active {
-  transform: scale(0.98);
-}
-
-/* layout and styling of the components */
-.App {
-  padding: 1em;
-}
-
+/* layout */
 .CalcContainer {
   background-color: black;
   padding: 1em;
-  width: 100%;
-  max-width: 18em;
+  max-width: 20em;
   margin: auto;
   border-radius: 2em;
-  box-shadow: 0 0 1em -0.8em rgba(0, 0, 0, 0.8);
   color: #ffff;
 }
 
@@ -110,7 +84,16 @@ button:active {
   gap: var(--gap);
 }
 
-.menuIcon {
-  width: 17px;
-  height: 17px;
+.Number {
+  flex: 3;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.Operator {
+  flex: 1;
+  display: grid;
+  grid-auto-rows: 1fr;
+  gap: var(--gap);
 }

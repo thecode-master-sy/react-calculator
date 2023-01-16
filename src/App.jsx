@@ -1,4 +1,4 @@
-import { useState, useReducer, useMemo, useEffect } from "react";
+import { useState, useReducer, useEffect } from "react";
 import Number from "./components/NumberButtons";
 import Operator from "./components/OperatorButtons";
 import { Evaluate } from "./Evaluate";
@@ -14,10 +14,20 @@ export const Actions = {
   Calculate: "calculate",
 };
 
+const numberToPower = (power, number = 10) => {
+  return Math.pow(number, power);
+};
+
 export const Format = (number) => {
   const formater = new Intl.NumberFormat();
 
-  if (number.toString().includes(".")) {
+  if (number > numberToPower(15)) {
+    console.log("it ran");
+
+    console.log(`this is the number ${number}`);
+
+    return number.toExponential(3);
+  } else if (number.toString().includes(".")) {
     const splitNum = number.toString().split(".");
 
     let whole = splitNum[0];
@@ -170,7 +180,7 @@ function App() {
   const [fsLarge, setFont] = useState("fs-large");
 
   useEffect(() => {
-    if (display.currentNumber.toString().length > 10) {
+    if (display.currentNumber > numberToPower(12)) {
       setFont("fs-mid");
     } else {
       setFont("fs-large");
@@ -180,7 +190,7 @@ function App() {
   return (
     <div className="App">
       <div className="CalcContainer">
-        <div className="Screen border">
+        <div className="Screen">
           <span className="fs-small display-block mg-bottom-large">
             {display.history}
           </span>
