@@ -22,10 +22,6 @@ export const Format = (number) => {
   const formater = new Intl.NumberFormat();
 
   if (number > numberToPower(15)) {
-    console.log("it ran");
-
-    console.log(`this is the number ${number}`);
-
     return number.toExponential(3);
   } else if (number.toString().includes(".")) {
     const splitNum = number.toString().split(".");
@@ -36,10 +32,6 @@ export const Format = (number) => {
     whole = formater.format(whole);
 
     const joined = whole + "." + decimal;
-
-    // const decimalNum = splitNum[1];
-    //
-    // const wholeFormated = wholeNum.toLocaleString();
 
     return joined;
   } else {
@@ -148,7 +140,11 @@ const reducer = (state, action) => {
     }
 
     case Actions.Delete: {
-      console.log("deleted 1 digit");
+      const stringified = state.currentNumber.toString();
+      return {
+        ...state,
+        currentNumber: stringified.slice(0, stringified.length - 1),
+      };
     }
 
     case Actions.Clear: {
